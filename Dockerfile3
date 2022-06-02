@@ -1,0 +1,10 @@
+FROM tensorflow/tensorflow:latest
+
+COPY . flask_api/
+RUN cd /flask_api
+WORKDIR /flask_api
+
+RUN /bin/bash -c "pip install transformers==4.12.2 Flask-Cors==3.0.10"
+
+EXPOSE 5000
+ENTRYPOINT ["tail", "-f", "/dev/null"]

@@ -1,0 +1,26 @@
+FROM centos:latest
+
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-* \
+    && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Linux-*
+
+RUN yum -y update  \
+    && yum -y install gcc unzip\
+    && yum -y install curl bzip2 \
+    && curl -sSL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
+    && bash /tmp/miniconda.sh -bfp /usr/local/ \
+    && rm -rf /tmp/miniconda.sh \
+    && conda install -y python=3.7 \
+    && conda update conda \
+    && conda clean --all --yes \
+    && rpm -e --nodeps curl bzip2
+
+RUN conda create -y -n my_env_prod python=3.7    
+
+COPY . flask_api/
+RUN cd /flask_api
+WORKDIR /flask_api
+
+RUN /bin/bash -c "source activate my_env_prod && pip install -r requirements.txt"
+
+EXPOSE 7000
+ENTRYPOINT ["tail", "-f", "/dev/null"]

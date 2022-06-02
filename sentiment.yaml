@@ -1,0 +1,11 @@
+version: '3'
+services: 
+  docker_centos:
+    image: sentiment_centos
+    ports: 
+      - 7000:3000
+
+  docker_tensorflow:
+    image: sentiment_tf
+    ports: 
+      - 5000:3000
