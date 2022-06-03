@@ -10,7 +10,8 @@ jobs:
 
   build:
 
-    runs-on: centos-latest
+    runs-on: ubuntu-latest
+    container: 'centos:latest'
 
     steps:
     - uses: actions/checkout@v3
